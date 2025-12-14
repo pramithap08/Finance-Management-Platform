@@ -10,6 +10,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@arcjet/next": "^1.0.0-beta.15",
+    "@bufbuild/protobuf": "^1.9.0",
     "@clerk/nextjs": "^6.35.5",
     "@hookform/resolvers": "^5.2.2",
     "@prisma/client": "^6.19.0",
