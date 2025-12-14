@@ -49,7 +49,7 @@ export async function createTransaction(data) {
       await tx.account.update({
         where: { id: data.accountId },
         data: {
-          balance: netBalanceChange,
+          balance: newBalance,
           },
       });
 
