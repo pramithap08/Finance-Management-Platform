@@ -29,6 +29,7 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import CreateAccountDrawer from '@/components/create-account-drawer';
+import ReceiptScanner from './receipt-scanner';
 
 const AddTransactionForm = ({ accounts,
   categories}) => {
@@ -80,8 +81,13 @@ const AddTransactionForm = ({ accounts,
       router.push(`/account/${transactionResult.data.accountId}`);
     }
   },[transactionResult,transactionLoading]);
+
+  const handleScanComplete = (scannedData) => {};
+
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+    {/* AI Receipt Scanner */}
+      <ReceiptScanner onScanComplete={handleScanComplete} />
         {/* Type */}
       <div className="space-y-2">
         <label className="text-sm font-medium">Type</label>
