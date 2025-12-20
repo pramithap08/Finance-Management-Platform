@@ -73,7 +73,7 @@ body {
 
 @layer utilities{
   .gradient{
-    @apply bg-gradient-to-br from-blue-600 to-purple-600;
+    @apply bg-gradient-to-br from-[#b45f77] to-[#4f030b];
   }
 
   .gradient-title{
