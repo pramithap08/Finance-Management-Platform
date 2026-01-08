@@ -67,6 +67,7 @@ const AddTransactionForm = ({ accounts,
             type: "EXPENSE",
             amount: "",
             description: "",
+            category:"",
             accountId: accounts.find((ac)=> ac.isDefault)?.id,
             date: new Date(),
             isRecurring:false,
@@ -105,20 +106,34 @@ const AddTransactionForm = ({ accounts,
       router.push(`/account/${transactionResult.data.accountId}`);
     }
   },[transactionResult,transactionLoading, editMode]);
-
+  const categoryValue=watch("category")||""
   const handleScanComplete = (scannedData) => {
-    if (scannedData) {
-      setValue("amount", scannedData.amount.toString());
-      setValue("date", new Date(scannedData.date));
-      if (scannedData.description) {
-        setValue("description", scannedData.description);
-      }
-      if (scannedData.category) {
-        setValue("category", scannedData.category);
-      }
-      toast.success("Receipt scanned successfully");
+  if (!scannedData) return;
+
+  setValue("amount", scannedData.amount.toString());
+  setValue("date", new Date(scannedData.date));
+  setValue("description", scannedData.description || "");
+
+  if (scannedData.type) {
+    const type = scannedData.type.toUpperCase();
+    setValue("type", type);
+  }
+
+  if (scannedData.category) {
+    const matchedCategory = categories.find(
+      (cat) =>
+        cat.name.toLowerCase() === scannedData.category.toLowerCase()
+    );
+
+    if (matchedCategory) {
+      setTimeout(() => {
+        setValue("category", matchedCategory.id);
+      }, 0);
     }
-  };
+  }
+
+  toast.success("Receipt scanned successfully");
+};
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -193,20 +208,20 @@ const AddTransactionForm = ({ accounts,
       <div className="space-y-2">
         <label className="text-sm font-medium">Category</label>
         <Select
-          onValueChange={(value) => setValue("category", value)}
-          defaultValue={getValues("category")}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Select category" />
-          </SelectTrigger>
-          <SelectContent>
-            {filteredCategories.map((category) => (
-              <SelectItem key={category.id} value={category.id}>
-                {category.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+            value={categoryValue}
+            onValueChange={(value) => setValue("category", value)}
+            >
+            <SelectTrigger>
+                <SelectValue placeholder="Select Category" />
+            </SelectTrigger>
+            <SelectContent>
+                {filteredCategories.map((category) => (
+                <SelectItem key={category.id} value={category.id}>
+                    {category.name}
+                </SelectItem>
+                ))}
+            </SelectContent>
+            </Select>
         {errors.category && (
           <p className="text-sm text-red-500">{errors.category.message}</p>
         )}
